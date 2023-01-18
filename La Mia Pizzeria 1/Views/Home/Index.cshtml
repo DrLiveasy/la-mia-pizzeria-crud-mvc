@@ -1,0 +1,83 @@
+﻿<!--
+   Esercizio di oggi: La mia pizzeria Model
+nome repo: la-mia-pizzeria-model
+IMPORTANTE:
+Ricordatevi di sganciare la vostra vecchia repository GIT e di crearne una nuova per questo esercizio, che prosegue il lavoro della pizzeria, 
+dove lo avevate lasciato. Potete eliminare il progetto Razor da questa esercitazione.
+Ciao ragazzi,
+andiamo avanti con l’applicazione per gestire la nostra pizzeria.
+Lo scopo di oggi è quello di rendere dinamici i contenuti che abbiamo come html statico nella pagina con la lista delle pizze.
+Creiamo prima un nostro controller chiamato PizzaController e utilizziamo lui d’ora in avanti. L’elenco delle pizze ora va passato come model dal controller,
+e la view deve utilizzarlo per mostrare l’html corretto.
+Gestiamo anche la possibilità che non ci siano pizze nell’elenco: 
+in quel caso dobbiamo mostrare un messaggio che indichi all’utente che non ci sono pizze presenti nella nostra applicazione.
+Ogni pizza dell’elenco avrà un pulsante che se cliccato ci porterà a una pagina che mostrerà i dettagli di quella singola pizza.
+Dobbiamo quindi inviare l’id come parametro dell’URL,
+recuperarlo con la action, caricare i dati della pizza ricercata e passarli come model.
+La view a quel punto li mostrerà all’utente con la grafica che preferiamo.
+Ps. visto che abbiamo cambiato il controller sul quale lavoriamo, 
+ricordiamoci di cambiare anche il “mapping di default” dei controller...altrimenti quale pagina viene caricata se richiamo l’url “/” della nostra webapp?
+-->
+
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>La Mia Pizzeria</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body class="m-auto">
+    <nav class="navbar bg-dark p-3 ">
+        <div class="container-xxl">
+            <a class="navbar-brand text-white">
+            <img src="https://seeklogo.com/images/P/pizza-logo-42816D88BE-seeklogo.com.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            La Mia Pizzeria
+            </a>
+        </div>
+    </nav>
+    
+
+    <div class="container-xxl ">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Foto</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Descrezione</th>
+            <th scope="col">Prezzo</th>
+      
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="w-25"><img class="w-75" src="./img/c00dc34a-e73d-42f0-a86e-e2fd967d33fe.jpg" alt="PizzaMargherita" /></td>
+            <td>Pizza Margherita</td>
+            <td>La pizza Margherita è la tipica pizza napoletana, condita con pomodoro, mozzarella, basilico fresco, sale e olio</td>
+            <td>7.50€</td>
+        </tr>
+        <tr>
+            <td class="w-25"><img class="w-75" src="./img/pizza-napoli.jpg" alt="PizzaNapoli" /></td>
+            <td>Pizza Napoli</td>
+            <td>La pizza Napoli viene realizzata stendendo la pasta per la pizza, aggiungendo il pomodoro, i capperi ed i filetti di acciughe cuocendo infine la pizza in forno.</td>
+            <td>7.50€</td>
+        </tr>
+        <tr>
+            <td class="w-25"><img class="w-75" src="./img/boscaiola-scaled.jpg" alt="PizzaBoscaiola" /></td>
+            <td>Pizza Boscaiola</td>
+            <td>La pizza boscaiola è davvero gustosa caratterizzata da funghi champignon accompagnati da gustosi pezzetti di salsiccia e ricoperta infine da mozzarella.</td>
+            <td>7.50€</td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
+
