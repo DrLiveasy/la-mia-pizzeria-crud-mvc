@@ -7,7 +7,7 @@
                 <h1 class="mt-3 mb-3">Dettagli Pizza</h1>
             </div>
             <div class="post-single-image-container w-75">
-                <img src="@Model.Foto" alt="PizzaMargherita" class="w-75" />
+                <img src="@Model.Foto" alt="@Model.Nome" class="w-75" />
             </div>
             <p>
                 <strong>Nome:</strong>
@@ -20,6 +20,10 @@
             <p>
                 <strong>Prezzo:</strong>
                 @Model.Prezzo <span>€</span>
+            </p>
+            <p>
+                <strong>Categoria:</strong>
+                @Model.Categoria.Name
             </p>
         </div>
     </div>
