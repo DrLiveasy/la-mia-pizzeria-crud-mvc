@@ -1,22 +1,13 @@
 ﻿<!--
-   Esercizio di oggi: La mia pizzeria Model
-nome repo: la-mia-pizzeria-model
-IMPORTANTE:
-Ricordatevi di sganciare la vostra vecchia repository GIT e di crearne una nuova per questo esercizio, che prosegue il lavoro della pizzeria, 
-dove lo avevate lasciato. Potete eliminare il progetto Razor da questa esercitazione.
-Ciao ragazzi,
-andiamo avanti con l’applicazione per gestire la nostra pizzeria.
-Lo scopo di oggi è quello di rendere dinamici i contenuti che abbiamo come html statico nella pagina con la lista delle pizze.
-Creiamo prima un nostro controller chiamato PizzaController e utilizziamo lui d’ora in avanti. L’elenco delle pizze ora va passato come model dal controller,
-e la view deve utilizzarlo per mostrare l’html corretto.
-Gestiamo anche la possibilità che non ci siano pizze nell’elenco: 
-in quel caso dobbiamo mostrare un messaggio che indichi all’utente che non ci sono pizze presenti nella nostra applicazione.
-Ogni pizza dell’elenco avrà un pulsante che se cliccato ci porterà a una pagina che mostrerà i dettagli di quella singola pizza.
-Dobbiamo quindi inviare l’id come parametro dell’URL,
-recuperarlo con la action, caricare i dati della pizza ricercata e passarli come model.
-La view a quel punto li mostrerà all’utente con la grafica che preferiamo.
-Ps. visto che abbiamo cambiato il controller sul quale lavoriamo, 
-ricordiamoci di cambiare anche il “mapping di default” dei controller...altrimenti quale pagina viene caricata se richiamo l’url “/” della nostra webapp?
+  Esercizio di oggi: Validazione + Modifica + Eliminazioni
+nome repo: la-mia-pizzeria-ef-post
+Andiamo avanti con i nostri sviluppi per la pizzeria... 
+Aggiungiamo qualche Data annotation per validare qualche proprietà del nostro modello Piazza che abbiamo creato.
+Dopodiché aggiungiamo dei nuovi metodi (action) al nostro Controller delle Pizze e le relative VIew che ci serviranno, p
+er riuscire a:
+modificare un pizza
+eliminare un pizza (ricordatevi di chiamare questa action con un form "fittizio" 
+che faccia una post con un bottone con l'id della pizza che volete eliminare)
 -->
 
 @{
@@ -58,6 +49,10 @@ ricordiamoci di cambiare anche il “mapping di default” dei controller...altr
                 <td>
                 <a class="btn btn-info btn-sm" href="@Url.Action("Dettaglio", "Pizza", new { id = pizza.Id })">
                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                             
+                </a>
+                <a class="btn btn-warning btn-sm" href="@Url.Action("Update", "Pizza", new { id = pizza.Id })">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon><line x1="3" y1="22" x2="21" y2="22"></line></svg>
                 </a>
                 </td>
             </tr>

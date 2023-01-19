@@ -88,5 +88,47 @@ namespace La_Mia_Pizzeria_1.Controllers
 
                 return RedirectToAction("Index");
             }
+
+
+        [HttpGet]
+        public IActionResult Update(int id) 
+        { 
+            using(PizzaContext db = new PizzaContext())
+            {
+                Pizza pizzaUpdate = db.Pizzas.Where(articolo => articolo.Id == id).FirstOrDefault();
+                if (pizzaUpdate == null)
+                {
+                    return NotFound("Pizza non Trovata!");
+                }
+                return View("Update", pizzaUpdate);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(Pizza fromaData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Update", fromaData);
+            }
+            using(PizzaContext db = new PizzaContext())
+            {
+                Pizza pizzaToUpdate = db.Pizzas.Where(articolo => articolo.Id== fromaData.Id).FirstOrDefault();
+                if (pizzaToUpdate != null)
+                {
+                    pizzaToUpdate.Nome = fromaData.Nome;
+                    pizzaToUpdate.Descrezione = fromaData.Descrezione;
+                    pizzaToUpdate.Prezzo = fromaData.Prezzo;
+                    pizzaToUpdate.Foto = fromaData.Foto;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return NotFound("La Pizza che volevi modificare non è stata trovata");
+                }
+            }
+        }
     }
 }
