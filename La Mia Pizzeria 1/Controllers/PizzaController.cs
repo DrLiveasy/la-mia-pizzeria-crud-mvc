@@ -130,5 +130,27 @@ namespace La_Mia_Pizzeria_1.Controllers
                 }
             }
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            using(PizzaContext db = new PizzaContext())
+            {
+                Pizza pizzaToDelete = db.Pizzas.Where(articolo => articolo.Id == id).FirstOrDefault();
+                if (pizzaToDelete != null)
+                {
+                    db.Pizzas.Remove(pizzaToDelete);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return NotFound("La pizza da eliminare non è stata trovata!");
+                }
+            }
+        }
+
     }
 }
