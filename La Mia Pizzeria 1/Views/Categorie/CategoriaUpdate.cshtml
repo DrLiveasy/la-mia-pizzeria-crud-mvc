@@ -4,11 +4,11 @@
     <form asp-controller="Categorie" asp-action="CategoriaUpdate" method="post">
         @Html.AntiForgeryToken()
         <div class="mb-3">
-            <label>Id:</label>
+            <label>Id della categoria:</label>
             <input asp-for="Id" type="text" class="form-control" disabled />
         </div>
         <div class="mb-3">
-            <label>Nome:</label>
+            <label class="mb-2 mt-2">Nome:</label>
             <input asp-for="Name" type="text" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>

@@ -4,7 +4,7 @@
     <form asp-controller="Pizza" asp-action="Update" method="post">
         @Html.AntiForgeryToken()
         <div class="mb-3">
-            <label>Id:</label>
+            <label>Id della pizza:</label>
             <input asp-for="Pizza.Id" type="text" class="form-control" disabled />
         </div>
         <div class="mb-3">
