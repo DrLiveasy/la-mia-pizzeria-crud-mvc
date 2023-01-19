@@ -11,6 +11,9 @@ namespace La_Mia_Pizzeria_1.Models
         public string Descrezione { get ; set ; }
         public double Prezzo { get; set; }
 
+        public int? CategoriaId { get; set; }
+        public Categoria? Categoria { get; set; }    
+
         public Pizza() 
         { 
 

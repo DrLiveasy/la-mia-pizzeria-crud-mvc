@@ -1,13 +1,16 @@
 ﻿<!--
-  Esercizio di oggi: Validazione + Modifica + Eliminazioni
-nome repo: la-mia-pizzeria-ef-post
-Andiamo avanti con i nostri sviluppi per la pizzeria... 
-Aggiungiamo qualche Data annotation per validare qualche proprietà del nostro modello Piazza che abbiamo creato.
-Dopodiché aggiungiamo dei nuovi metodi (action) al nostro Controller delle Pizze e le relative VIew che ci serviranno, p
-er riuscire a:
-modificare un pizza
-eliminare un pizza (ricordatevi di chiamare questa action con un form "fittizio" 
-che faccia una post con un bottone con l'id della pizza che volete eliminare)
+  Esercizio di oggi: Relazione 1-n con EF e MVC
+nome repo: la-mia-pizzeria-crud-mvc
+Ciao ragazzi, nuova giornata di lavoro!
+Oggi sviluppiamo un’importante funzionalità: aggiungiamo una categoria alle nostre pizze (”Pizze classiche”,
+“Pizze bianche”, “Pizze vegetariane”, “Pizze di mare”, ...).
+Dobbiamo quindi predisporre tutto il codice necessario per poter collegare una categoria a una pizza 
+(in una relazione 1 a molti, cioè una pizza può avere una sola categoria, 
+e una categoria può essere collegata a più pizze). Tramite migration dobbiamo creare la tabella per le categorie. 
+Popoliamola a mano con i valori elencati precedentemente.
+Aggiungiamo poi l’informazione della categoria nelle varie pagine :
+nei dettagli di una singola pizza (nell’admin) mostrare la sua categoria
+quando si crea/modifica una pizza si deve poter selezionare anche la sua categoria
 -->
 
 @{
