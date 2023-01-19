@@ -1,0 +1,15 @@
+﻿
+@model Categoria
+
+
+<div class="container">
+<form asp-controller="Categorie" asp-action="CategorieCreate" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label>Scrivi qua il nome della nuova categoria che vuoi aggiungere : </label>
+        <input asp-for="Name" type="text" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mb-4">Salva</button>
+</form>
+</div>

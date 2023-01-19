@@ -10,5 +10,6 @@ namespace La_Mia_Pizzeria_1.Models
         // QUesta lista di categories servirà per la select nel from in modo che possa far visualizzare all'utente
         // tutte le categorie da cui poter selezionare un opzione per il Post
         public List<Categoria>? Categorias { get; set; }
+
     }
 }

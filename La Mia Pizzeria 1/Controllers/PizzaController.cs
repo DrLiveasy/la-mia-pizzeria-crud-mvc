@@ -22,6 +22,7 @@ namespace La_Mia_Pizzeria_1.Controllers
             }
            
         }
+
         public IActionResult Dettaglio(int id)
         {
 
