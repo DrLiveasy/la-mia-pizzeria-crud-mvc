@@ -25,6 +25,15 @@
                 <strong>Categoria:</strong>
                 @Model.Categoria.Name
             </p>
+            <p>
+                <strong>Ingredienti:</strong>
+                @foreach (Ingredienti ingredienti in Model.Ingredientis)
+                {
+                        <div>
+                            <label>@ingredienti.Name</label>
+                        </div>
+                }
+            </p>
         </div>
     </div>
 </div>

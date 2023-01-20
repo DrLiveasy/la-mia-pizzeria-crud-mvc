@@ -12,5 +12,14 @@ namespace La_Mia_Pizzeria_1.Models
         // tutte le categorie da cui poter selezionare un opzione per il Post
         public List<Categoria>? Categorias { get; set; }
 
+        // Questa proprietà ci servirà per poter passare alla vista che contiene il form
+        // la lista di tutti i tag da cui l'utente potrà selezionare
+        public List<SelectListItem>? Ingredientis { get; set; }
+
+        // Predisponiamo il nostro modello per la vista Create e MOdify con questa nuova proprietà per poter
+        // ricevere gli id dei tag che l'utente ha selezionato. Purtroppo questi saranno di tipo string perchè quando avevamo
+        // passato i Value per ogni opzione nella select questi erano di tipo string!
+        public List<string>? IngredientisSelectedFromMultipleSelect { get; set; }
+
     }
 }
