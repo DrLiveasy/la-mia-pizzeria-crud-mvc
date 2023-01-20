@@ -13,8 +13,11 @@ namespace La_Mia_Pizzeria_1.Models
 
         public int? CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }    
+        
+        public List<Ingredienti> Ingredientis { get; set; }
 
-        public Pizza() 
+
+        public Pizza()
         { 
 
         }

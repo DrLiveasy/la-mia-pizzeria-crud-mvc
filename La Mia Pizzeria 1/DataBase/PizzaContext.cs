@@ -8,6 +8,8 @@ namespace La_Mia_Pizzeria_1.DataBase
     {
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Ingredienti> Ingredientis { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=localhost;"
