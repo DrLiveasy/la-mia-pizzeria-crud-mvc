@@ -2,6 +2,7 @@
 using La_Mia_Pizzeria_1.DataBase;
 using La_Mia_Pizzeria_1.Models;
 using La_Mia_Pizzeria_1.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Runtime.ConstrainedExecution;
 
 namespace La_Mia_Pizzeria_1.Controllers
 {
+    [Authorize]
     public class PizzaController : Controller
     {
         public IActionResult Index()
