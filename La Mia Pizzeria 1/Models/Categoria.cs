@@ -4,17 +4,11 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Pizza>? Pizzas { get; set; }
-
-        public Categoria()
-        { 
-
-        }
-
-        public Categoria(string name, List<Pizza> pizzas)
+        public List<Pizza> Pizzas { get; set; } = new List<Pizza>();
+        public Categoria(){}
+        public Categoria(string name)
         {
             Name = name;
-            Pizzas = pizzas;
         }
     }
 }

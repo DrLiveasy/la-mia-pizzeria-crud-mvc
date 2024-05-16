@@ -2,6 +2,7 @@
 using La_Mia_Pizzeria_1.DataBase;
 using La_Mia_Pizzeria_1.Models;
 using La_Mia_Pizzeria_1.Utils;
+using LaMiaPizzeria1.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,193 +17,96 @@ namespace La_Mia_Pizzeria_1.Controllers
     [Authorize]
     public class PizzaController : Controller
     {
-        public IActionResult Index()
+        private readonly PizzaContext _db;
+        public PizzaController(PizzaContext db)
         {
-
-            using (PizzaContext db = new PizzaContext())
-            {
-                List<Pizza> pizzaList = db.Pizzas.ToList();
-                //List<Pizza> pizzaList = new List<Pizza>();
-
-                return View("Index", pizzaList);
-            }
-           
+            _db = db;
         }
-
-        public IActionResult Dettaglio(int id)
+        public async Task<IActionResult> Index()
         {
-
-            /*
-            bool FunzioneDiRicercaPizzaById(Pizza pizza)
-            {
-                return pizza.Id == id;
-            }
-            */
-
-            using (PizzaContext db = new PizzaContext())
-
-            {
-                // LINQ: syntax methos
-                Pizza PizzaTrovata = db.Pizzas
-                    .Where(SingolaPizzaNelDb => SingolaPizzaNelDb.Id == id)
-                    .Include(pizza=> pizza.Categoria)
-                    .Include(pizza=> pizza.Ingredientis)
-                    .FirstOrDefault();
-
-                // LINQ: query syntax
-                /* Pizza pizzaTrovato =
-                     (from p in db.pizza
-                      where p.Id == id
-                      select p).FirstOrDefault<pizza>();*/
-
-                // SQL QUERY
-                /* Pizza pizzaTrovato =
-                     db.pizzas.FromSql($"SELECT * FROM pizzas WHERE Id = {id}")
-                     .FirstOrDefault<Pizza>(); */
-
-                if (PizzaTrovata != null)
-                {
-                    return View(PizzaTrovata);
-                }
-
-                return NotFound("La pizza con l'id cercato non esiste!");
-
-            }
-            
-           
-
+            List<Pizza> pizzaList = await _db.Pizzas.ToListAsync();
+            return View("Index", pizzaList);
         }
-
-
-         
-            [HttpGet]
+        public async Task<IActionResult> Dettaglio(int id)
+        {
+            Pizza pizzaTrovata = await _db.Pizzas
+                .Include(pizza => pizza.Categoria)
+                .Include(pizza => pizza.Ingredientis)
+                .FirstOrDefaultAsync(pizza => pizza.Id == id);
+            if (pizzaTrovata != null)
+            {
+                return View(pizzaTrovata);
+            }
+            return NotFound("La pizza con l'id cercato non esiste!");
+        }
+        [HttpGet]
         public IActionResult Create()
         {
-            using(PizzaContext db = new PizzaContext())
+            var categoriasFromDB = _db.Categorias.ToList();
+            var modelForView = new PizzaCtegorieView
             {
-                List<Categoria> CategoriasFromDB = db.Categorias.ToList<Categoria>();
-
-                PizzaCtegorieView modelForView = new PizzaCtegorieView();
-                modelForView.Pizza = new Pizza();
-
-                modelForView.Categorias = CategoriasFromDB;
-                modelForView.Ingredientis = IngredientisConvertor.getListIngredientisForMultipleSelect();
-
-                return View("Create", modelForView);
-            }
-                
+                Pizza = new Pizza(),
+                Categorias = categoriasFromDB,
+                Ingredientis = IngredientisConvertor.GetListIngredientisForMultipleSelect(_db)
+            };
+            return View("Create", modelForView);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PizzaCtegorieView formData)
+        public async Task<IActionResult> Create(PizzaCtegorieView formData)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                using (PizzaContext db = new PizzaContext())
-                {
-                    List<Categoria> categories = db.Categorias.ToList<Categoria>();
-
-                    formData.Categorias = categories;
-
-
-                    formData.Ingredientis = IngredientisConvertor.getListIngredientisForMultipleSelect();
-                }
-
-
-                return View("Create", formData);
-            }
-
-            using (PizzaContext db = new PizzaContext())
-            {
-                if(formData.IngredientisSelectedFromMultipleSelect != null)
+                if (formData.IngredientisSelectedFromMultipleSelect != null)
                 {
                     formData.Pizza.Ingredientis = new List<Ingredienti>();
-
-                    foreach(string ingredientiId in formData.IngredientisSelectedFromMultipleSelect)
+                    foreach (var ingredientiId in formData.IngredientisSelectedFromMultipleSelect)
                     {
                         int ingredientiIdIntFromSelcet = int.Parse(ingredientiId);
-
-                        Ingredienti ingredienti = db.Ingredientis.Where(ingredientiDb => ingredientiDb.Id == ingredientiIdIntFromSelcet).FirstOrDefault();
-
-                        // todo controllare eventuali altri errori tipo l'id del tag non esiste
-
+                        Ingredienti ingredienti = await _db.Ingredientis.FindAsync(ingredientiIdIntFromSelcet);
                         formData.Pizza.Ingredientis.Add(ingredienti);
-
-
                     }
-
-
                 }
+                _db.Pizzas.Add(formData.Pizza);
+                await _db.SaveChangesAsync();
 
-
-                db.Pizzas.Add(formData.Pizza);
-                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
+            var categories = await _db.Categorias.ToListAsync();
+            formData.Categorias = categories;
+            formData.Ingredientis = IngredientisConvertor.GetListIngredientisForMultipleSelect(_db);
+            return View("Create", formData);
         }
-
-
         [HttpGet]
-        public IActionResult Update(int id) 
-        { 
-            using(PizzaContext db = new PizzaContext())
+        public async Task<IActionResult> Update(int id)
+        {
+            Pizza pizzaUpdate = await _db.Pizzas
+                .Where(articolo => articolo.Id == id)
+                .Include(pizza => pizza.Ingredientis)
+                .FirstOrDefaultAsync();
+            if (pizzaUpdate == null)
             {
-                Pizza pizzaUpdate = db.Pizzas.Where(articolo => articolo.Id == id).Include(pizza => pizza.Ingredientis).FirstOrDefault();
-
-                if (pizzaUpdate == null)
-                {
-                    return NotFound("Pizza non Trovata!");
-                }
-                List<Categoria> categories = db.Categorias.ToList<Categoria>();
-
-                PizzaCtegorieView modelForView = new PizzaCtegorieView();
-
-                modelForView.Pizza = pizzaUpdate;
-                modelForView.Categorias = categories;
-
-                List<Ingredienti> listIngredientiFromDb = db.Ingredientis.ToList<Ingredienti>();
-
-                List<SelectListItem> listaOpzioniPerLaSelect = new List<SelectListItem>();
-
-                foreach (Ingredienti ingredienti in listIngredientiFromDb)
-                {
-                    // Ricerco se il ingredienti che sto inserindo nella lista delle opzioni della select era già stato selezionato dall'utente
-                    // all'interno della lista dei ingredienti del post da modificare
-                    bool eraStatoSelezionato = pizzaUpdate.Ingredientis.Any(ingredientiSelezionati => ingredientiSelezionati.Id == ingredienti.Id );
-
-                    SelectListItem opzioneSingolaSelect = new SelectListItem() { Text = ingredienti.Name, Value = ingredienti.Id.ToString(), Selected = eraStatoSelezionato };
-                    listaOpzioniPerLaSelect.Add(opzioneSingolaSelect);
-                }
-
-                modelForView.Ingredientis = listaOpzioniPerLaSelect;
-
-                return View("Update", modelForView);
+                return NotFound("Pizza non Trovata!");
             }
+            var categories = await _db.Categorias.ToListAsync();
+            var modelForView = new PizzaCtegorieView
+            {
+                Pizza = pizzaUpdate,
+                Categorias = categories,
+                Ingredientis = IngredientisConvertor.GetListIngredientisForMultipleSelect(_db)
+            };
+            return View("Update", modelForView);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id , PizzaCtegorieView formData)
+        public async Task<IActionResult> Update(int id, PizzaCtegorieView formData)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-
-                using (PizzaContext db = new PizzaContext())
-                {
-                    List<Categoria> categorias = db.Categorias.ToList <Categoria>();
-
-                    formData.Categorias = categorias;
-
-                }
-                return View("Update", formData);
-            }
-
-            using(PizzaContext db = new PizzaContext())
-            {
-                Pizza pizzaToUpdate = db.Pizzas.Where(articolo => articolo.Id == id).Include(pizza => pizza.Ingredientis).FirstOrDefault();
-
+                Pizza pizzaToUpdate = await _db.Pizzas
+                    .Where(articolo => articolo.Id == id)
+                    .Include(pizza => pizza.Ingredientis)
+                    .FirstOrDefaultAsync();
                 if (pizzaToUpdate != null)
                 {
                     pizzaToUpdate.Nome = formData.Pizza.Nome;
@@ -210,27 +114,24 @@ namespace La_Mia_Pizzeria_1.Controllers
                     pizzaToUpdate.Prezzo = formData.Pizza.Prezzo;
                     pizzaToUpdate.Foto = formData.Pizza.Foto;
                     pizzaToUpdate.CategoriaId = formData.Pizza.CategoriaId;
-
-                    // rimuoviamo i tag e inseriamo i nuovi
                     pizzaToUpdate.Ingredientis.Clear();
-
                     if (formData.IngredientisSelectedFromMultipleSelect != null)
                     {
-
                         foreach (string ingredientiId in formData.IngredientisSelectedFromMultipleSelect)
                         {
                             int ingredientiIdIntFromSelect = int.Parse(ingredientiId);
-
-                            Ingredienti ingredienti = db.Ingredientis.Where(ingredientiDb => ingredientiDb.Id == ingredientiIdIntFromSelect).FirstOrDefault();
-
-                            // todo controllare eventuali altri errori tipo l'id del ingredienti non esiste
-
-                            pizzaToUpdate.Ingredientis.Add(ingredienti);
+                            Ingredienti ingredienti = await _db.Ingredientis.FindAsync(ingredientiIdIntFromSelect);
+                            if (ingredienti != null)
+                            {
+                                pizzaToUpdate.Ingredientis.Add(ingredienti);
+                            }
+                            else
+                            {
+                                return NotFound("L'ingrediente selezionato non esiste.");
+                            }
                         }
                     }
-
-
-                    db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
                 else
@@ -238,36 +139,27 @@ namespace La_Mia_Pizzeria_1.Controllers
                     return NotFound("La Pizza che volevi modificare non è stata trovata");
                 }
             }
+            var categories = await _db.Categorias.ToListAsync();
+            formData.Categorias = categories;
+            formData.Ingredientis = IngredientisConvertor.GetListIngredientisForMultipleSelect(_db);
+            return View("Update", formData);
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            using (PizzaContext db = new PizzaContext())
+            Pizza pizzaToDelete = await _db.Pizzas.FindAsync(id);
+            if (pizzaToDelete != null)
             {
-                Pizza pizzaToDelete = db.Pizzas.Where(post => post.Id == id).FirstOrDefault();
+                _db.Pizzas.Remove(pizzaToDelete);
+                await _db.SaveChangesAsync();
 
-                if (pizzaToDelete != null)
-                {
-                    db.Pizzas.Remove(pizzaToDelete);
-                    db.SaveChanges();
-
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return NotFound("La pizza da eliminare non è stata trovata!");
-                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound("La pizza da eliminare non è stata trovata!");
             }
         }
-
-        [HttpDelete]
-        public IActionResult ProvaDelete()
-        {
-            return View("Create");
-        }
-
     }
 }

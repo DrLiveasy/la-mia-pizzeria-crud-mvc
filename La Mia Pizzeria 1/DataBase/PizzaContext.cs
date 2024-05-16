@@ -8,16 +8,18 @@ namespace La_Mia_Pizzeria_1.DataBase
 {
     public class PizzaContext : IdentityDbContext<IdentityUser>
     {
+        public PizzaContext() { }
+        public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Ingredienti> Ingredientis { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost;"
-                                        + "Database=PizzeriaMVC;"
-                                        + "Integrated Security=True;"
-                                        + "TrustServerCertificate=True");
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer("DefaultConnection");
+            }
         }
     }
 }

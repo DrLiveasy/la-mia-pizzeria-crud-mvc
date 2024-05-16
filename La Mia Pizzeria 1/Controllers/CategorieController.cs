@@ -1,21 +1,24 @@
 ﻿using La_Mia_Pizzeria_1.DataBase;
 using La_Mia_Pizzeria_1.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace La_Mia_Pizzeria_1.Controllers
 {
     public class CategorieController : Controller
     {
+        private readonly PizzaContext _db;
+
+        public CategorieController(PizzaContext db)
+        {
+            _db = db;
+        }
 
         public IActionResult Categorie()
         {
-            using (PizzaContext db = new PizzaContext())
-            {
-                List<Categoria> categoriaList = db.Categorias.ToList();
-
-                return View("Categorie", categoriaList);
-            }
+            List<Categoria> categoriaList = _db.Categorias.ToList();
+            return View("Categorie", categoriaList);
         }
 
         [HttpGet]
@@ -33,30 +36,24 @@ namespace La_Mia_Pizzeria_1.Controllers
                 return View("CategorieCreate", formData);
             }
 
-            using (PizzaContext db = new PizzaContext())
-            {
-                db.Categorias.Add(formData);
-                db.SaveChanges();
-            }
+            _db.Categorias.Add(formData);
+            _db.SaveChanges();
 
             return RedirectToAction("Categorie");
         }
 
 
         [HttpGet]
-        public IActionResult  CategoriaUpdate(int id)
+        public IActionResult CategoriaUpdate(int id)
         {
-            using (PizzaContext db = new PizzaContext())
-            {
-                Categoria CategoriaToUpdate = db.Categorias.Where(articolo => articolo.Id == id).FirstOrDefault();
+            Categoria categoriaToUpdate = _db.Categorias.Find(id);
 
-                if (CategoriaToUpdate == null)
-                {
-                    return NotFound("la categoria è stata trovata");
-                }
-                return View("CategoriaUpdate", CategoriaToUpdate);
+            if (categoriaToUpdate == null)
+            {
+                return NotFound("La categoria non è stata trovata");
             }
 
+            return View("CategoriaUpdate", categoriaToUpdate);
         }
 
         [HttpPost]
@@ -68,47 +65,38 @@ namespace La_Mia_Pizzeria_1.Controllers
                 return View("CategoriaUpdate", formData);
             }
 
-            using (PizzaContext db = new PizzaContext())
+            Categoria categoriaToUpdate = _db.Categorias.Find(formData.Id);
+
+            if (categoriaToUpdate != null)
             {
-                Categoria postToUpdate = db.Categorias.Where(articolo => articolo.Id == formData.Id).FirstOrDefault();
+                categoriaToUpdate.Name = formData.Name;
+                _db.SaveChanges();
 
-                if (postToUpdate != null)
-                {
-                    postToUpdate.Name = formData.Name;
-                    db.SaveChanges();
-
-                    return RedirectToAction("Categorie");
-                }
-                else
-                {
-                    return NotFound("La categoria che volevi modificare non è stata trovata!");
-                }
+                return RedirectToAction("Categorie");
             }
-
+            else
+            {
+                return NotFound("La categoria che volevi modificare non è stata trovata!");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CategoriaDelete(int id)
         {
-            using (PizzaContext db = new PizzaContext())
+            Categoria categoriaToDelete = _db.Categorias.Find(id);
+
+            if (categoriaToDelete != null)
             {
-                Categoria categorieToDelete = db.Categorias.Where(post => post.Id == id).FirstOrDefault();
+                _db.Categorias.Remove(categoriaToDelete);
+                _db.SaveChanges();
 
-                if (categorieToDelete != null)
-                {
-                    db.Categorias.Remove(categorieToDelete);
-                    db.SaveChanges();
-
-                    return RedirectToAction("Categorie");
-                }
-                else
-                {
-                    return NotFound("la categorie da eliminare non è stata trovata!");
-                }
+                return RedirectToAction("Categorie");
+            }
+            else
+            {
+                return NotFound("La categoria da eliminare non è stata trovata!");
             }
         }
-
-
     }
 }

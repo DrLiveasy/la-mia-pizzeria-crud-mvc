@@ -20,12 +20,7 @@ quando si crea/modifica una pizza si deve poter selezionare anche la sua categor
 @model List<Pizza>
 
     @if (Model.Count > 0){
-
-
     <div class="container-xxl">
-
-        
-
         <table class="table text-muted">
         <thead>
         <tr>
@@ -34,14 +29,11 @@ quando si crea/modifica una pizza si deve poter selezionare anche la sua categor
             <th scope="col">Descrezione</th>
             <th scope="col">Prezzo</th>
             <th scope="col"></th>
-      
         </tr>
         </thead>
            <tbody>
-
             @foreach (Pizza pizza in Model)
-            {
-                
+            {   
             <tr>
                 <td><img id="imgOnIndex" src="@pizza.Foto" alt="@pizza.Nome" /></td>
                 <td>@pizza.Nome</td>
@@ -50,7 +42,6 @@ quando si crea/modifica una pizza si deve poter selezionare anche la sua categor
                 <td>
                 <a class="btn btn-info btn-sm mt-1 mb-1" href="@Url.Action("Dettaglio", "Pizza", new { id = pizza.Id })">
                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                             
                 </a>
                 <a class="btn btn-warning btn-sm mt-1 mb-1" href="@Url.Action("Update", "Pizza", new { id = pizza.Id })">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon><line x1="3" y1="22" x2="21" y2="22"></line></svg>
@@ -64,12 +55,9 @@ quando si crea/modifica una pizza si deve poter selezionare anche la sua categor
                 </td>
             </tr>
             }
-
         </tbody>
         </table>
-
     </div>
-
 }else {
     <h1>al momento no ci sono pizze da visualizzare </h1>
 }
