@@ -114,6 +114,11 @@ namespace La_Mia_Pizzeria_1.Controllers
                 Categorias = categories,
                 Ingredientis = IngredientisConvertor.GetListIngredientisForMultipleSelect(_db)
             };
+            if (modelForView.Pizza.Ingredientis.Any())
+            {
+                modelForView.IngredientisSelectedFromMultipleSelect =
+                    modelForView.Pizza.Ingredientis.Select(i => i.Id.ToString()).ToList();
+            }
             return View("Update", modelForView);
         }
         [HttpPost]
@@ -131,6 +136,10 @@ namespace La_Mia_Pizzeria_1.Controllers
             if (formData.Pizza.Prezzo < 0)
             {
                 ModelState.AddModelError("Pizza.Prezzo", "Il prezzo della pizza non può essere negativo.");
+            }
+            if (formData.IngredientisSelectedFromMultipleSelect == null || formData.IngredientisSelectedFromMultipleSelect.Count == 0)
+            {
+                ModelState.AddModelError("IngredientisSelectedFromMultipleSelect", "Seleziona almeno un ingrediente.");
             }
             if (ModelState.IsValid)
             {
