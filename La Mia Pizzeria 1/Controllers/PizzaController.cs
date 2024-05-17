@@ -55,6 +55,25 @@ namespace La_Mia_Pizzeria_1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PizzaCtegorieView formData)
         {
+            // Verifica la lunghezza massima per Nome e Descrizione
+            if (formData.Pizza.Nome.Length > 50)
+            {
+                ModelState.AddModelError("Pizza.Nome", "Il nome della pizza non può superare i 50 caratteri.");
+            }
+            if (formData.Pizza.Descrezione.Length > 250)
+            {
+                ModelState.AddModelError("Pizza.Descrezione", "La descrizione della pizza non può superare i 250 caratteri.");
+            }
+            // Verifica che il prezzo sia positivo
+            if (formData.Pizza.Prezzo < 0)
+            {
+                ModelState.AddModelError("Pizza.Prezzo", "Il prezzo della pizza non può essere negativo.");
+            }
+            // Verifica che sia stato selezionato almeno un ingrediente
+            if (formData.IngredientisSelectedFromMultipleSelect == null || formData.IngredientisSelectedFromMultipleSelect.Count == 0)
+            {
+                ModelState.AddModelError("IngredientisSelectedFromMultipleSelect", "Seleziona almeno un ingrediente.");
+            }
             if (ModelState.IsValid)
             {
                 if (formData.IngredientisSelectedFromMultipleSelect != null)

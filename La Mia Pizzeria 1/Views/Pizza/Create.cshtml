@@ -3,6 +3,13 @@
 <div class="container mt-4">
     <form asp-controller="Pizza" asp-action="Create" method="post">
         @Html.AntiForgeryToken()
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <p>Seleziona almeno un ingrediente.</p>
+            </div>
+        }
         <div class="mb-3">
             <label>Nome:</label>
             <input asp-for="Pizza.Nome" type="text" class="form-control"/>
