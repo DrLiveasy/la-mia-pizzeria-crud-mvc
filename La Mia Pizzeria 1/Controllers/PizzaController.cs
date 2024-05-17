@@ -120,6 +120,18 @@ namespace La_Mia_Pizzeria_1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, PizzaCtegorieView formData)
         {
+            if (formData.Pizza.Nome.Length > 50)
+            {
+                ModelState.AddModelError("Pizza.Nome", "Il nome della pizza non può superare i 50 caratteri.");
+            }
+            if (formData.Pizza.Descrezione.Length > 250)
+            {
+                ModelState.AddModelError("Pizza.Descrezione", "La descrizione della pizza non può superare i 250 caratteri.");
+            }
+            if (formData.Pizza.Prezzo < 0)
+            {
+                ModelState.AddModelError("Pizza.Prezzo", "Il prezzo della pizza non può essere negativo.");
+            }
             if (ModelState.IsValid)
             {
                 Pizza pizzaToUpdate = await _db.Pizzas
