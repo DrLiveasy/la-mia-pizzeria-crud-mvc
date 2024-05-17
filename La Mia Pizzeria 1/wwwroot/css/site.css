@@ -3,3 +3,25 @@
     height: 150px;
     width: 200px
 }
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
+    text-align: center;
+}
+
+.navbar-brand {
+    margin-right: 20px; 
+}
+
+.custom-navbar-toggler {
+    color: white; 
+    border-color: white; 
+}
+    .custom-navbar-toggler.collapsed {
+        color: white; 
+    }
