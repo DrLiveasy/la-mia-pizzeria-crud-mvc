@@ -23,15 +23,22 @@
             </p>
             <p>
                 <strong>Categoria:</strong>
-                @Model.Categoria.Name
+                @if (Model.Categoria != null)
+                {
+                    @Model.Categoria.Name
+                }
+                else
+                {
+                    <span>Categoria non specificata</span>
+                }
             </p>
             <p>
                 <strong>Ingredienti:</strong>
                 @foreach (Ingredienti ingredienti in Model.Ingredientis)
                 {
-                        <div>
-                            <label>@ingredienti.Name</label>
-                        </div>
+                    <div>
+                        <label>@ingredienti.Name</label>
+                    </div>
                 }
             </p>
         </div>
