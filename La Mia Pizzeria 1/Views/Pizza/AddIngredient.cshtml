@@ -1,0 +1,14 @@
+﻿
+@model Ingredienti
+
+<div class="container">
+    <form asp-controller="Pizza" asp-action="AddIngredient" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label class="mb-2 mt-2">Scrivi qua il nome dell tuo ingrediente che vuoi aggiungere : </label>
+            <input asp-for="Name" type="text" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mb-4">Salva</button>
+    </form>
+</div>

@@ -201,5 +201,25 @@ namespace La_Mia_Pizzeria_1.Controllers
                 return NotFound("La pizza da eliminare non è stata trovata!");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> AddIngredient()
+        {
+            return View("AddIngredient");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddIngredient(Ingredienti formData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("AddIngredient", formData);
+            }
+
+            _db.Ingredientis.Add(formData);
+            _db.SaveChanges();
+
+            return RedirectToAction("Create");
+        }
     }
 }

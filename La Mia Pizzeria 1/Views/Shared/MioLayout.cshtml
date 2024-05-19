@@ -22,10 +22,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-4">
                     <li class="nav-item">
-                        <a class="nav-link text-success" href="@Url.Action("Create", "Pizza")">Aggiungi nuova pizza</a>
+                        <a class="nav-link text-success" href="@Url.Action("Create", "Pizza")">Aggiungi Pizza</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="@Url.Action("Categorie", "Categorie")">Modifica o aggiungi categoria</a>
+                        <a class="nav-link text-warning" href="@Url.Action("Categorie", "Categorie")">Aggiungi Categoria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="@Url.Action("AddIngredient", "Pizza")">Aggiungi Ingrediente</a>
                     </li>
                     <!-- code omitted -->
                     <partial name="_LoginPartial" />
