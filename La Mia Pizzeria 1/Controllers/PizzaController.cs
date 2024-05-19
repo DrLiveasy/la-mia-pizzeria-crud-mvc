@@ -88,7 +88,6 @@ namespace La_Mia_Pizzeria_1.Controllers
                 }
                 _db.Pizzas.Add(formData.Pizza);
                 await _db.SaveChangesAsync();
-
                 return RedirectToAction("Index");
             }
             var categories = await _db.Categorias.ToListAsync();
@@ -206,7 +205,6 @@ namespace La_Mia_Pizzeria_1.Controllers
         {
             return View("AddIngredient");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddIngredient(Ingredienti formData)
@@ -215,10 +213,8 @@ namespace La_Mia_Pizzeria_1.Controllers
             {
                 return View("AddIngredient", formData);
             }
-
             _db.Ingredientis.Add(formData);
             _db.SaveChanges();
-
             return RedirectToAction("Create");
         }
     }

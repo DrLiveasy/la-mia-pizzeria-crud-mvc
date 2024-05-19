@@ -9,24 +9,20 @@ namespace La_Mia_Pizzeria_1.Controllers
     public class CategorieController : Controller
     {
         private readonly PizzaContext _db;
-
         public CategorieController(PizzaContext db)
         {
             _db = db;
         }
-
         public IActionResult Categorie()
         {
             List<Categoria> categoriaList = _db.Categorias.ToList();
             return View("Categorie", categoriaList);
         }
-
         [HttpGet]
         public IActionResult CategorieCreate()
         {
             return View("CategorieCreate");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CategorieCreate(Categoria formData)
@@ -41,8 +37,6 @@ namespace La_Mia_Pizzeria_1.Controllers
 
             return RedirectToAction("Categorie");
         }
-
-
         [HttpGet]
         public IActionResult CategoriaUpdate(int id)
         {
@@ -55,7 +49,6 @@ namespace La_Mia_Pizzeria_1.Controllers
 
             return View("CategoriaUpdate", categoriaToUpdate);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CategoriaUpdate(Categoria formData)
@@ -79,7 +72,6 @@ namespace La_Mia_Pizzeria_1.Controllers
                 return NotFound("La categoria che volevi modificare non è stata trovata!");
             }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CategoriaDelete(int id)
